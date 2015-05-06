@@ -56,7 +56,7 @@
   (let [current-winner-votes (last (first sorted-votes))
         total-votes (reduce + (map last sorted-votes))]
     (if (> (/ current-winner-votes total-votes) 0.5)
-      [true (first (first sorted-votes))]
+      [true (ffirst sorted-votes)]
       [false (first (last sorted-votes))])))
 
 (defn remove-ballots
@@ -77,4 +77,4 @@
         (do (println (str (last counted) " is eliminated"))
           (recur (remove-ballots ballots (last counted))))))))
 
-(simulate-election (generate-random-votes 500000))
+(simulate-election (generate-random-votes 100))
