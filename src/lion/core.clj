@@ -39,7 +39,7 @@
   [ballots]
   (map first ballots))
 
-(defn grouped-votes
+(defn group-ballots
   [ballots]
   (vals (group-by :voter (sort-by :pref < ballots))))
 
@@ -66,7 +66,7 @@
 (defn simulate-election
   [ballots]
   (loop [ballots ballots]
-    (let [sorted (->> (grouped-votes ballots)
+    (let [sorted (->> (group-ballots ballots)
                       get-current-votes
                       sort-votes)
           counted (count-votes sorted)]
