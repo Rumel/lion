@@ -59,22 +59,34 @@
       [true (ffirst sorted-votes)]
       [false (first (last sorted-votes))])))
 
+(defn get-sorted-votes
+  [ballots]
+  (->> (group-ballots ballots)
+       get-current-votes
+       sort-votes))
+
 (defn remove-ballots
   [ballots candidate-name]
   (filter #(not= (:name %) candidate-name) ballots))
 
+(defn print-winner
+  [winner] 
+  (println (str "The winner is: " winner))
+  winner)
+
+(defn print-elimination
+  [eliminated]
+  (println (str eliminated " is eliminated")))
+
 (defn simulate-election
   [ballots]
   (loop [ballots ballots]
-    (let [sorted (->> (group-ballots ballots)
-                      get-current-votes
-                      sort-votes)
+    (let [sorted (get-sorted-votes ballots)
           counted (count-votes sorted)]
       (println (str "Current votes: " sorted))
       (if (first counted)
-        (do (println (str "The winner is: " (last counted)))
-          (last counted))
-        (do (println (str (last counted) " is eliminated"))
-          (recur (remove-ballots ballots (last counted))))))))
+        (print-winner (last counted))
+        (do (print-elimination (last counted)) 
+            (recur (remove-ballots ballots (last counted))))))))
 
 (simulate-election (generate-random-votes 100))
